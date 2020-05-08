@@ -20,7 +20,7 @@ func Api(api *echo.Group){
 	api.GET("/particular/get3/:name", Particular.ParticularGet) //先在页面获取id，然后跳转到修改页面
 	api.GET("/particular/get4/:name", Particular.ParticularGet4)
 
-	api.GET("/particular/page", Particular.ParticularPage)   //分页设置
+	api.GET("/article/page", Article.ArticlePage)   //分页设置
 	//user
 	api.POST("/user/add",user.UserAdd)
 

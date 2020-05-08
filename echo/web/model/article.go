@@ -17,7 +17,7 @@ type Article struct {
 //count 数据总数
 func ArticleCount() int {
 	count := 0
-	DB.Get(&count, "select count(id) as count from class")
+	DB.Unsafe().Get(&count, "select count(id) as count from article")
 	return count
 }
 
@@ -25,7 +25,9 @@ func ArticleCount() int {
 
 func ArticlePage(pi, ps int) ([]Article, error) {
 	mods := make([]Article, 0, ps)
-	err := DB.Select(&mods, "select * from article limit ?,?", (pi-1)*ps, ps)
+	err := DB.Unsafe().Select(&mods, "select * from user,article where user.id=article.uid limit ?,?", (pi-1)*ps, ps)
+
+	//err := DB.Unsafe().Select(&mods, "select * from article limit ?,?", (pi-1)*ps, ps)
 	return mods, err
 }
 

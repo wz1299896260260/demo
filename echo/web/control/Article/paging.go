@@ -18,7 +18,7 @@ func ArticlePage(e echo.Context)error{
 		ipt.Pi=1
 	}
 	if ipt.Ps<1||ipt.Ps>50{
-		ipt.Ps=6 //超过范围给默认值
+		ipt.Ps=10000 //超过范围给默认值
 	}
 	count := model.ArticleCount()
 	if count<1{
@@ -28,5 +28,5 @@ func ArticlePage(e echo.Context)error{
 	if err!=nil{
 		return e.JSON(utils.ErrOpt("未查询到数据",err.Error()))
 	}
-	return e.JSON(utils.Page("新闻数据",mods,count))
+	return e.JSON(utils.Page("评论数据",mods,count))
 }
