@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>list</title>
+</head>
+<body>
+<ul id="ctn">
+    <li><b>标题</b><span>[标题]</span><b>作者</b><span>[作者]</span>
+        <button onclick="del(id)">删除</button>
+    </li>
+</ul>
+<script id="test" type="text/html">
+    {{each data item key}}
+    <li>[{{item.id}}]<b>标题</b><span>[{{item.title}}]</span><b>作者</b><span>[{{item.author}}]</span>
+        <button onclick="del({{item.id}})">删除</button>&nbsp;<button onclick="goEdit({{item.id}})">修改</button>&nbsp;
+        <a href="/detail?id={{item.id}}">查看</a></li>
+    {{/each}}
+</script>
+<script src="/static/jquery.min.js"></script>
+<script src="/static/template-web.js"></script>
+<script>
+    function init() {//自动初始化
+        $.get("/api/list/data", {}, function (resp) {
+            if (resp.code == 200) {
+                // var data = {resp: resp}
+                var html = template("test", resp)//传模板id
+                $("#ctn").html(html);
+            } else {
+                alert(resp.msg)
+            }
+
+        }, "json")
+    }
+
+    function del(id) {
+        $.get("/api/list/del", {id: id}, function (resp) {
+            if (resp.code == 200) {
+                init();
+            } else {
+                alert(resp.msg)
+            }
+        });
+    }
+
+    function goEdit(id) {
+        window.location.href = "/edit?id=" + id
+    }
+
+    init();
+</script>
+</body>
+</html>
