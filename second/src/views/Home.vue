@@ -2,15 +2,18 @@
   <div class="content">
     <div class="home"  >
       <div class="home1">
-      <router-link to="/login">
-        <Button>登录</Button>
-      </router-link>
-      <router-link to="/regist">
-        <Button>注册</Button>
-      </router-link>
-       <router-link to="/login">
+       <router-link to="/content1">
         <Button>添加</Button>
       </router-link>
+      <router-link to="/exchange">
+        <Button>交流区</Button>
+      </router-link>
+      <router-link to="/">
+        <Button>退出登录</Button>
+      </router-link>
+       <router-link to="/homecopy">
+          <Button style="margin-left: 8px">修改</Button>
+        </router-link>
       </div>
       <!-- <Button @click="list">显示</Button>    点击触发-->
       <!-- 不影响自动实现 -->

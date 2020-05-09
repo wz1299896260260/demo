@@ -2,9 +2,12 @@
 <template>
 <div class="exchange-container">
     <div class="text1">
-    <List>
-        <ListItem item-layout="vertical"  v-for="(item, index) in historyData"  :key="index">      
+    <List >
+        <ListItem item-layout="vertical"  v-for="(item, index) in historyData"  :key="index" >      
            <ListItemMeta :title="item.name"  :description="item.content"  />
+           <template slot="action">
+              <Button v-if="currentUid === item.uid" type="primary" @click="del(item.uid)">删除</Button>
+            </template>
         </ListItem>
     </List>
     <Page :total="dataCount" :page-size="pageSize" show-total  @on-change="changepage"></Page>
@@ -32,6 +35,8 @@ import min from "../api/min";
 export default {
   data() {
     return {
+       currentUid: '', // 当前用户的id
+
      ajaxHistoryData:[],
     // 初始化信息总条数
       dataCount:0,
@@ -56,6 +61,9 @@ export default {
         console.log(resp);
         if (resp.code == 200) {
           // this.arr = resp.data.items;
+          let token = localStorage.getItem("token")
+          let newtoken = jwtDecode(token)
+          this.currentUid = newtoken.id
            this.ajaxHistoryData = resp.data.items;
                 this.dataCount = resp.data.count;
                 // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
@@ -76,9 +84,10 @@ export default {
              created(){
              this.list();
         },
-          handleSubmit(name) {
+
+        handleSubmit(name) {
       let token = localStorage.getItem("token");
-      let newtoken = jwtDecode(token);
+      let newtoken = jwtDecode(token); 
       this.formValidate.uid = newtoken.id;
       console.log(this.formValidate);
       this.$refs[name].validate(valid => {
@@ -86,14 +95,28 @@ export default {
           min.post("/adm/article/add", this.formValidate).then(resp => {
             if (resp.code == 200) {
               this.$Message.success(resp.msg);
+              this.formValidate='';
             } else {
               this.$Message.error(resp.msg);
             }
           });
         }
+        this.list()
       });
     },
-    },
+  del(uid){
+    var uid=uid;
+    console.log(uid)
+    min.get("/adm/article/del/"+uid).then(res=>{
+      if (res.code==200){
+        this.$Message.success(res.msg);
+           } else {
+        this.$Message.error(resp.msg);
+      }
+      this.list()
+    });
+  },
+ },
  
 };
 </script>
@@ -109,7 +132,8 @@ export default {
 }
 
 .text1 {
-  text-align: center;
+  text-align: left;
+  margin: 0 50px;
   position: relative;
 }
 .ivu-page{
