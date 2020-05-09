@@ -25,9 +25,9 @@ func ArticleCount() int {
 
 func ArticlePage(pi, ps int) ([]Article, error) {
 	mods := make([]Article, 0, ps)
-	err := DB.Unsafe().Select(&mods, "select * from user,article where user.id=article.uid limit ?,?", (pi-1)*ps, ps)
-
-	//err := DB.Unsafe().Select(&mods, "select * from article limit ?,?", (pi-1)*ps, ps)
+	//err := DB.Unsafe().Select(&mods, "select user.name,article.id,article.content from user,article where user.id=article.uid limit ?,?", (pi-1)*ps, ps)
+	//err := DB.Unsafe().Select(&mods, "select user.name,article.id,article.content from user join article  on user.id=article.uid limit ?,?", (pi-1)*ps, ps)
+	err := DB.Unsafe().Select(&mods, " select * from user,article where user.id=article.uid limit ?,?", (pi-1)*ps, ps)
 	return mods, err
 }
 
@@ -60,4 +60,26 @@ func ArticleAll() ([]Article, error) {
 	err := DB.Unsafe().Select(&mods, "select * from user,article where user.id=article.uid ")
 	//err := DB.Unsafe().Select(&mods,"select name from user where id in(select uid from article) union select content from article where uid in(select id from user)")
 	return mods, err
+}
+
+
+//删除
+func ArticlerDel(uid int64) error {
+	tx, _ := DB.Begin() //开启一个事务，保险，
+	result, err := tx.Exec("delete from article where uid=? limit 1", uid)
+	if err != nil {
+		//回滚,撤销
+		tx.Rollback()
+		return err
+	}
+	//update, insert, or delete都会返回受影响的行数
+	row, _ := result.RowsAffected()
+	if row < 1 {
+		//回滚
+		tx.Rollback()
+		return errors.New("rows affected<1")
+	}
+	//手动提交，写入数据
+	tx.Commit()
+	return nil
 }
