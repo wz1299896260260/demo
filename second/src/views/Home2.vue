@@ -4,6 +4,9 @@
       <router-link to="/content1">
         <Button>添加</Button>
       </router-link>
+      <router-link to="/reset">
+        <Button>修改密码</Button>
+      </router-link>
     </div>
       <div class="biede1" >
         <!-- 学校
@@ -54,6 +57,7 @@ export default {
         }
       });
     },
+
     search1(val){
        let token = localStorage.getItem('token')
         let newtoken = jwtDecode(token)
