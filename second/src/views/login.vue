@@ -52,7 +52,9 @@ export default {
     clicklogin(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          //md5加密
           this.formInline.password=md5(this.formInline.password)
+          
           min.post("/api/login", this.formInline).then(resp => {
             console.log(resp)
            if(resp.code==200){
