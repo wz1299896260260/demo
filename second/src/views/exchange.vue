@@ -44,7 +44,7 @@ export default {
      pageSize:10,
      historyData: [],
       formValidate: {
-        content: ""
+        content: "",
       },
       ruleValidate: {
         text: [{ required: true, message: "不能为空", trigger: "blur" }]
@@ -95,7 +95,7 @@ export default {
           min.post("/adm/article/add", this.formValidate).then(resp => {
             if (resp.code == 200) {
               this.$Message.success(resp.msg);
-              this.formValidate='';
+              // this.formValidate="";
             } else {
               this.$Message.error(resp.msg);
             }
