@@ -2,11 +2,12 @@ package model
 
 import (
 	"errors"
+
 )
 
 type Article struct {
-	//表的内容
-	Id      int64  `json:"id"`
+	//表的内容 ,把id的json数据取消
+	Id      int
 	Content string `json:"content"`
 	Uid     int64  `json:"uid"`
 	User
@@ -57,7 +58,7 @@ func ArticleAdd(mod *Article) error {
 func ArticleAll() ([]Article, error) {
 	mods := make([]Article, 0, 8)
 	//err := DB.Unsafe().Select(&mods, "select * from article ")
-	err := DB.Unsafe().Select(&mods, "select * from user,article where user.id=article.uid ")
+	err := DB.Unsafe().Select(&mods, "select * from user, article where article.uid=user.id ")
 	//err := DB.Unsafe().Select(&mods,"select name from user where id in(select uid from article) union select content from article where uid in(select id from user)")
 	return mods, err
 }
