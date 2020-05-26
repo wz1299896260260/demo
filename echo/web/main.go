@@ -39,7 +39,9 @@ func main1(){
 	}
 	qq(head)//*tail改变的head值
 }
+func main2(){
 
+}
 
 
 
